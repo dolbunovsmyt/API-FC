@@ -1,0 +1,322 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "FreshCargo API v0.1 Alpha Specification",
+    "description": "This document describes the specification of API version v0.1 Alpha for FreshCargo software. API v0.1 Alpha is designed to integrate FreshCargo software with the BI systems of FC clients, namely, to obtain products' databases available to the user without the possibility of filtering by filters",
+    "version": "0.1.Alpha"
+  },
+  "security": [
+    {
+      "api_key": []
+    }
+  ],
+  "servers": [
+    {
+      "url": "https://api.reports.freshcargo.com.pe/v1",
+      "description": "FreshCargo API link"
+    }
+  ],
+  "paths": {
+    "/products": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Finds Products IDs available for the user by the user's API key generated automatically in the FC software",
+        "operationId": "getAllIds",
+        "responses": {
+          "200": {
+            "description": "Successful response with a list of Products IDs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Products"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Everything non-standart",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/database/{product_id}": {
+      "get": {
+        "tags": [
+          "Database"
+        ],
+        "summary": "Gets database for the particular Product ID",
+        "operationId": "getDatabaseById",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "description": "Product ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with a database data for the Product",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Database"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Everything non-standart",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "api_key": {
+        "description": "API key need for the authorization",
+        "type": "apiKey",
+        "name": "api_key",
+        "in": "header"
+      }
+    },
+    "schemas": {
+      "Product": {
+        "required": [
+          "active_season",
+          "full_name",
+          "name",
+          "product_id"
+        ],
+        "type": "object",
+        "properties": {
+          "product_id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 7
+          },
+          "name": {
+            "type": "string",
+            "example": "Citrus"
+          },
+          "active_season": {
+            "type": "string",
+            "example": "2024 - 2025"
+          },
+          "full_name": {
+            "type": "string",
+            "example": "Citrus 2024 - 2025"
+          }
+        }
+      },
+      "Products": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Product"
+        }
+      },
+      "Error": {
+        "required": [
+          "code",
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "Database": {
+        "required": [
+          "BL_AWB",
+          "arrival_port",
+          "bins",
+          "category",
+          "commercial_units",
+          "container_number",
+          "containers",
+          "departure_port_airport",
+          "destination_country",
+          "eta",
+          "eta_week",
+          "etd",
+          "etd_week",
+          "exporter",
+          "fob",
+          "importer",
+          "location",
+          "manifest",
+          "market",
+          "season",
+          "shipment_by",
+          "shipping_company",
+          "species",
+          "submarket",
+          "subspecies",
+          "transport_company",
+          "type_of_variety",
+          "variety",
+          "vessel",
+          "weight"
+        ],
+        "type": "object",
+        "properties": {
+          "season": {
+            "type": "string",
+            "example": "2024"
+          },
+          "shipment_by": {
+            "type": "string",
+            "example": "SEA"
+          },
+          "departure_port_airport": {
+            "type": "string",
+            "example": "CALLAO"
+          },
+          "vessel": {
+            "type": "string",
+            "example": "KOTA CARUM"
+          },
+          "etd": {
+            "type": "string",
+            "format": "date"
+          },
+          "etd_week": {
+            "type": "integer",
+            "format": "int64",
+            "example": 9
+          },
+          "exporter": {
+            "type": "string",
+            "example": "COMERCIALIZADORA SARP SAC"
+          },
+          "importer": {
+            "type": "string",
+            "example": "GAINFUL UNIVERSAL FOODS LIMITED"
+          },
+          "arrival_port": {
+            "type": "string",
+            "example": "HONG KONG"
+          },
+          "destination_country": {
+            "type": "string",
+            "example": "CHINA"
+          },
+          "market": {
+            "type": "string",
+            "example": "ASIA"
+          },
+          "submarket": {
+            "type": "string",
+            "example": "EAST ASIA"
+          },
+          "eta": {
+            "type": "string",
+            "format": "date"
+          },
+          "eta_week": {
+            "type": "integer",
+            "format": "int64",
+            "example": 14
+          },
+          "commercial_units": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1080
+          },
+          "weight": {
+            "type": "integer",
+            "format": "int64",
+            "example": 22530
+          },
+          "containers": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1
+          },
+          "bins": {
+            "type": "integer",
+            "format": "int64",
+            "example": 0
+          },
+          "fob": {
+            "type": "string",
+            "example": "NS"
+          },
+          "category": {
+            "type": "string",
+            "example": "CONVENTIONAL"
+          },
+          "species": {
+            "type": "string",
+            "example": "PECAN"
+          },
+          "subspecies": {
+            "type": "string",
+            "example": "PECAN"
+          },
+          "variety": {
+            "type": "string",
+            "example": "NS"
+          },
+          "type_of_variety": {
+            "type": "string",
+            "example": "NA"
+          },
+          "BL_AWB": {
+            "type": "string",
+            "example": "EGLV751300012102"
+          },
+          "container_number": {
+            "type": "string",
+            "example": "EMCU5320745"
+          },
+          "manifest": {
+            "type": "string",
+            "example": "23-278"
+          },
+          "transport_company": {
+            "type": "string",
+            "example": "5009-TERMINALES PORTUARIOS PERUANOS SAC"
+          },
+          "location": {
+            "type": "string",
+            "example": "AREQUIPA"
+          },
+          "shipping_company": {
+            "type": "string",
+            "example": "SEABOARD"
+          }
+        }
+      }
+    }
+  }
+}
